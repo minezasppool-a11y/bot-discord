@@ -1,12 +1,17 @@
-const { Client, GatewayIntentBits } = require("discord.js");
+const { Client, GatewayIntentBits, Events } = require("discord.js");
 
 const client = new Client({
-  intents: [GatewayIntentBits.Guilds]
+  intents: [GatewayIntentBits.Guilds],
 });
 
-client.once("ready", () => {
-  console.log("Bot online!");
+client.once(Events.ClientReady, () => {
+  console.log(`Bot online como ${client.user.tag}`);
 });
 
-client.login("client.login(process.env.DISCORD_TOKEN);");
+// verifica se o token existe (evita crash silencioso)
+if (!process.env.DISCORD_TOKEN) {
+  console.error("ERRO: DISCORD_TOKEN não encontrado nas variáveis de ambiente");
+  process.exit(1);
+}
 
+client.login(process.env.DISCORD_TOKEN);
